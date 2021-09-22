@@ -1,0 +1,33 @@
+session_name: 'shiphero'
+windows:
+- window_name: nvim
+  focus: 'true'
+  options: {}
+  panes:
+  - focus: 'true'
+    shell_command: nvim
+  start_directory: /home/mavignau/src/Shiphero-API
+- window_name: mycli
+  options: {}
+  panes:
+  - shell_command: zsh
+  start_directory: /home/mavignau/src/Shiphero-API
+- window_name: git
+  layout: 49b3,212x48,0,0[212x35,0,0,3,212x12,0,36,4]
+  panes:
+  - shell_command: lazy
+  - shell_command: zsh
+  start_directory: /home/mavignau/src/Shiphero-API
+# use: tmux display-message -p "#{window_layout}"
+- window_name: files
+  layout: 49b3,212x48,0,0[212x35,0,0,3,212x12,0,36,4]
+  panes:
+  - shell_command: vifm .
+  - shell_command: zsh
+  start_directory: /home/mavignau/src/Shiphero-API
+- window_name: test
+  options: {}
+  panes:
+  - shell_command: zsh   
+  start_directory: /home/mavignau/src/Shiphero-API
+  

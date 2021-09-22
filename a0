@@ -1,0 +1,7 @@
+export LINKFROM = "~"
+export LINKTO = "."
+function linkcreate() {
+    echo $LINKFROM/$1 $LINKTO/$1
+}
+
+linkcreate .config/nvim/custom.vim

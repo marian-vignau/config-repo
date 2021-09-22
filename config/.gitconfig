@@ -1,0 +1,38 @@
+[user]
+	email = mavignau@gmail.com
+	name = María Andrea Vignau
+
+[include]
+    path = ~/.config/themes.gitconfig
+
+[pager]
+    diff = ~/.bin/delta/delta
+    log = ~/.bin/delta/delta
+    reflog = ~/bin/delta/delta
+    show = ~/bin/delta/delta
+
+[delta]
+    features = mavignau
+#    features = mantis-shrimp
+#    features = woolly-mammoth
+#    features = calochortus-lyallii
+#    plus-style = "syntax #012800"
+#    minus-style = "syntax #340001"
+#    syntax-theme = Monokai Extended
+#    navigate = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+# define command which will be used when "nvim" is set as a merge tool
+[mergetool "nvim"]
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+# set "nvim" as tool for merging
+[merge]
+  tool = nvim
+# automatically launch merge tool without displaying a prompt
+[mergetool]
+  prompt = false
+
+[alias]
+	track = for-each-ref --sort upstream --format='%(refname:short) <- %(upstream:short)' refs/heads
