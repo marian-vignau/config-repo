@@ -1,5 +1,0 @@
-git:
-  paging:
-    colorArg: always
-    pager: ~/.bin/delta/delta --dark --paging=never
-
