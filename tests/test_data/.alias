@@ -1,0 +1,60 @@
+alias sh_down='ENV=prod TEMP=/tmp docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.app-endpoints-local.yml down'
+alias sh_build='ENV=prod TEMP=/tmp docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.app-endpoints-local.yml build app-endpoints'
+#alias sh_prod_start='ENV=prod TEMP=/tmp docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.app-endpoints-local.yml run --service-ports -d app-endpoints'
+alias sh_test_start='docker-compose -f docker/docker-compose.yml -f docker/docker-compose.app-endpoints.yml run --service-ports app-endpoints bash'
+#alias sh_test_start='ENV=local TEMP=/tmp docker-compose -f ./docker/docker-compose.yml -f ./docker/docker-compose.app-endpoints-local.yml run --service-ports -d app-endpoints'
+alias noarmor="sudo aa-remove-unknown"
+alias docker_stop="sudo aa-remove-unknown; docker container stop \$(docker container ls -a -q)"
+alias wk="tmuxp load shp"
+alias wk2="tmuxp load shp2"
+alias lazy="~/.bin/lazygit/lazygit"
+alias dock="~/.bin/lazygit/lazydocker"
+
+function gitup {
+    if [ $(ps ax | grep [s]sh-agent | wc -l) -gt 0 ] ; then
+        echo "ssh-agent is already running"
+    else
+        eval $(ssh-agent -s)
+        if [ "$(ssh-add -l)" == "The agent has no identities." ] ; then
+            ssh-add ~/.ssh/id_rsa
+        fi
+
+        # Don't leave extra agents around: kill it on exit. You may not want this part.
+        trap "ssh-agent -k" exit
+    fi
+}
+
+function gitup2 {
+    eval `ssh-agent` 
+    ssh-add ~/.ssh/shiphero
+}
+
+function ship {
+  if [ $(cat /proc/sys/net/ipv4/ip_forward | grep 0) ]
+  then
+      sudo sysctl -w net.ipv4.ip_forward=1
+  else
+      echo "ip forward enabled"
+  fi
+  export ENV=$1
+  source ~/.shiphero
+  docker-compose -f docker/docker-compose.yml -f docker/docker-compose.app-endpoints.yml run --service-ports app-endpoints bash
+  echo "Running ShipHero ENV=$env"
+}
+
+function vpn {
+  sudo openvpn --config ~/.config/client.ovpn
+}
+
+function pre () {
+    echo Preparing $1 to commit
+    is_pdb=$(grep -c 'pdb.set_trace()' $1)
+    if [ $is_pdb -gt  0 ]
+    then
+        echo "Error: pdb presente"
+        sed -i '/pdb\.set_trace()/d' $1
+    fi
+    black --line-length 120 --target-version py36 $1
+    isort $1
+}
+
